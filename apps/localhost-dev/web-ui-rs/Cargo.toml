@@ -1,0 +1,15 @@
+[package]
+name = "web-ui-rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.8"
+tokio = { version = "1", features = ["full"] }
+rust-embed = "8.0"
+mime_guess = "2.0"
+
+[[bin]]
+name = "web-ui-rs"
+path = "main.rs"
+

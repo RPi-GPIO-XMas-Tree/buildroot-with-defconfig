@@ -1,0 +1,18 @@
+[package]
+name = "gpio-control"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.8"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+rppal = "0.22.1"
+serde_json = "1"
+
+[profile.release]
+opt-level = "z"     # Optimizeaza pentru dimensiune
+lto = true          # Link Time Optimization
+codegen-units = 1   # Generare cod mai lenta, dar binar mai mic
+panic = "abort"     # Elimina infrastructura de unwind
+strip = true        # Elimina simbolurile de debug din binar

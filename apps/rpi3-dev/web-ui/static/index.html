@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 RPI/GPIO Internet of Trees</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Internet of X-Mas Trees</h1>
+
+    <div id="ip-info">
+        <span id="ip-address">Loading IP...</span>
+        <span id="location">Detecting location...</span>
+    </div>
+
+    <div class="tree-container">
+        <div class="star">
+            <div id="rgb-0" class="led" data-type="rgb"></div>
+        </div>
+        <div class="crown"></div>
+        
+        <div class="level level-2">
+            <div id="rgb-1" class="led" data-type="rgb"></div>
+            <div id="rgb-2" class="led" data-type="rgb"></div>
+        </div>
+
+        <div class="level level-3">
+            <div id="rgb-3" class="led" data-type="rgb"></div>
+            <div id="rgb-4" class="led" data-type="rgb"></div>
+            <div id="rgb-5" class="led" data-type="rgb"></div>
+        </div>
+
+        <div class="level level-4">
+            <div id="non-rgb-0" class="led" data-type="non-rgb"></div>
+            <div id="non-rgb-1" class="led" data-type="non-rgb"></div>
+        </div>
+
+        <div class="trunk"></div>
+    </div>
+
+    <h2 class="control-title">Control Panel for RPI/GPIO Internet of Trees</h2>
+
+    <div class="controls-section">
+        <aside class="control-panel">
+            <h2>non-RGB LEDs</h2>
+            <div class="non-rgb-controls">
+                <label>Left LED:</label>
+                <select id="non-rgb-ctrl-0" class="select-dropdown btn-nonrgb" onchange="setNonRgbState(0, this.value)">
+                    <option value="off">OFF</option>
+                    <option value="on">ON</option>
+                    <option value="blinking">BLINKING</option>
+                </select>
+                
+                <label>Right LED:</label>
+                <select id="non-rgb-ctrl-1" class="select-dropdown btn-nonrgb" onchange="setNonRgbState(1, this.value)">
+                    <option value="off">OFF</option>
+                    <option value="on">ON</option>
+                    <option value="blinking">BLINKING</option>
+                </select>
+            </div>
+        </aside>
+
+        <aside class="control-panel">
+            <h2>RGB LEDs</h2>
+            <p class="status-text">Now is running: <span id="current-animation">None</span></p>
+            <div class="rgb-buttons">
+                <button class="btn btn-rgb" onclick="prevAnim()">PREV</button>
+                <button class="btn btn-rgb" onclick="nextAnim()">NEXT</button>
+                <select id="animation-dropdown" class="select-dropdown btn-action" onchange="selectAnim()">
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
