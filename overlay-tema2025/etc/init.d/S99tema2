@@ -1,0 +1,25 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+    echo "Starting GPIO control and Web UI..."
+    # Pornim controlul GPIO în fundal (daemon)
+    /bin/gpio-control &
+    sleep 1
+    /bin/web-ui &
+    ;;
+  stop)
+    echo "Stopping applications..."
+    killall web-ui
+    killall gpio-control
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
