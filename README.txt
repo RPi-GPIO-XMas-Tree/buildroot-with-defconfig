@@ -42,7 +42,7 @@ Ar fi fost o idee buna sa fi folosit 'cut down' (nu am incercat).
 
 # make linux-menuconfig
 
-Pentru a rezolva problema de hash, am descarcat separat arhiva de linux v6.12 si am scris hash-ul ei (sha256sum) in 'buildroot-2025.11/linux/linux/hash'.
+Pentru a rezolva problema de hash, am descarcat separat arhiva de linux v6.12 si am scris hash-ul ei (sha256sum) in 'buildroot-2025.11/linux/linux.hash'.
 
 Odata deschis meniul:
 - am dezactivat suportul pentru modulele (kernel monolit)

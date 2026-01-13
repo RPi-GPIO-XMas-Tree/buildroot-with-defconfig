@@ -18,7 +18,7 @@ cp buildroot/.config buildroot_config
 
 zip -r $SRC_ARCHIVE \
     checksum.txt \
-    apps/rpi3-dev/* \
+    apps-rpi3/* \
     README.txt \
     url.txt \
     overlay-tema2025/ \
@@ -26,7 +26,7 @@ zip -r $SRC_ARCHIVE \
     buildroot_config \
     kernel_config \
     archivate.sh \
-    Makefile \
+    cp-artifacts.sh \
     -x "**/target/*" # Exclude executabilele compilate de cargo
 
 
