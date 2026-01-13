@@ -87,7 +87,7 @@ Intrucat niciun serviciu nu depinde de 'glic', am putut face o optimizare.
 # Optimizari
 - Am inlocuit toolchain-ul 'glibc' cu 'musl'
     foarte costisitor la timp, a trebuit sa o iau de la 0, dar am pastrat config-ul de kernel
-    spatiul ocupat de '/dev/root' scazand de la ~23M la ~7.5M.
+    spatiul ocupat de '/dev/root' a scazut de la (peste) 20M la sub 10M.
 - Am aplicat compresie asupra imaginii de kernel de menuconfig ('Image.gz' kernel binary format + 'xz' kernel compression format)
 - Am ales flag-ul '-0s' (optimise for size) din configuratia generala de kernel 
 - Am inlocuit 'openssh' cu 'dropbear'
