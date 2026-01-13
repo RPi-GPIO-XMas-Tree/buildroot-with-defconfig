@@ -1,4 +1,4 @@
-# Tema SI - raspberrypi3_64_defconfig
+# Tema SI - defconfig
 
 - buildroot-2025.11 (stable)
 - linux kernel: v6.12
