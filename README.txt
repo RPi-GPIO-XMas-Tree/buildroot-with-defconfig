@@ -46,7 +46,7 @@ Pentru a rezolva problema de hash, am descarcat separat arhiva de linux v6.12 si
 
 Odata deschis meniul:
 - am dezactivat suportul pentru modulele (kernel monolit)
-- am adaugat numele meu in versiune si am dezactivat 'auto append v info....'
+- am adaugat numele meu in versiune si am dezactivat 'auto append version info....'
 - am scris numele default hostname-ului
 - am activat 'IP: kernel autoconfiguration' -> 'IP: DHCP support' din optiunile de retea
 
