@@ -23,8 +23,9 @@ De data asta, am ales defconfig-ul generic ('make defconfig').
 
 # make menuconfig
 
-In menuconfig, am setat arhitectura 'aarch64 (little endian)', varianta 'cortex-A53', am instalat libgpiod si openssh (pe care l-am inlocuit mai tarziu cu dropbear),
-am configurat hostname-ul, parola, am verificat ca apare 'eth0' la DHCP,
+In menuconfig, am setat arhitectura 'aarch64 (little endian)', varianta 'cortex-A53',
+am instalat libgpiod (l-am dezactivat ulterior) si openssh (l-am inlocuit mai tarziu cu dropbear),
+am configurat hostname-ul, parola, am trecut 'eth0' la interfata configurata prin DHCP,
 am creat un folder (separat de buildroot) pe care l-am folosit pentru overlay
 (include configuratia SSH, binarele pentru cele 2 servicii si script-ul din init.d cu permisiuni de executie)
 si am configurat consola care apare in QEMU la bootare ('ttyS1' cu baudrate=115200).
@@ -37,8 +38,7 @@ Am configurat parametrii initiali ai kernel-ului:
 - Inainte sa fac dezactivarile de kernel, am copiat fisierul in afara buildroot-ului (ca backup)
     si am specificat calea catre el ('using a custom (def)config file')
 
-Si am activat firmware-ul default pentru rpi 3 (target pckgs -> hw handling).
-Ar fi fost o idee buna sa fi folosit 'cut down' (nu am incercat).
+Si am activat firmware-ul default pentru rpi 0/1/2/3 (target pckgs -> hw handling).
 
 # make linux-menuconfig
 
@@ -48,7 +48,7 @@ Odata deschis meniul:
 - am dezactivat suportul pentru modulele (kernel monolit)
 - am adaugat numele meu in versiune si am dezactivat 'auto append version info....'
 - am scris numele default hostname-ului
-- am activat 'IP: kernel autoconfiguration' -> 'IP: DHCP support' din optiunile de retea
+- am verificat ca este activat 'IP: kernel autoconfiguration' -> 'IP: DHCP support' din optiunile de retea
 
 
 # Compilarea (make)
@@ -78,8 +78,6 @@ Pentru scriptul de init, am folosit o prioritate mai mare decat cea a serviciilo
 Primii 18 pini sunt grupati cate 3 (6 LED-uri RGB); iar de utimii 2 pini sunt legati cate un LED non-RGB (culoare predefinita in WEB UI).
 Logica este de active pe HIGH, iar LED-urile RGB pot avea si alte culori decat cele de baza, prin imbinarea a 2 canale RGB.
 
-Pentru a vizualiza WEB UI, nu folosi un browser Chrome. Nu se vede bine.
-Recomand Firefox.
 
 Intrucat niciun serviciu nu depinde de 'glic', am putut face o optimizare.
 
