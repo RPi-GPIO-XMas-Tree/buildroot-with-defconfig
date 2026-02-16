@@ -15,6 +15,7 @@ sha256sum $BIN_ARCHIVE > checksum.txt
 
 
 cp buildroot/.config buildroot_config
+cp buildroot/packages/busybox/busybox.config busybox_config
 
 zip -r $SRC_ARCHIVE \
     checksum.txt \
@@ -25,6 +26,7 @@ zip -r $SRC_ARCHIVE \
     build-apps.sh \
     buildroot_config \
     kernel_config \
+	busybox_config \
     archivate.sh \
     cp-artifacts.sh \
     -x "**/target/*" # Exclude executabilele compilate de cargo

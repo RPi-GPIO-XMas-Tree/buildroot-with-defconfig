@@ -11,4 +11,4 @@ cd apps-rpi3/web-ui \
     && cd - \
     && cp apps-rpi3/web-ui/target/aarch64-unknown-linux-musl/release/web-ui overlay-tema2025/bin/
 
-chmod +x overlay-tema2025/etc/init.d/S99tema2
+chmod +x overlay-tema2025/etc/init.d/*
