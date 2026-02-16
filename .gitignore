@@ -1,3 +1,9 @@
+# Permite explicit:
+!buildroot_defconfig
+!buildroot-2025.11/output/images
+!buildroot-2025.11/linux/linux.hash
+!buildroot-2025.11/packages/busybox/busybox.config
+
 target/
 buildroot-[0-9]*.[0-9]*/
 buildroot-[0-9]*.[0-9]*.tar.gz
@@ -6,7 +12,3 @@ buildroot-[0-9]*.[0-9]*.tar.gz
 !buildroot_defconfig
 !SI-Tema2-bin.tar.xz
 !SI-Tema2-src.zip
-!buildroot-2025.11/output/images/
-!buildroot-2025.11/linux/linux.hash
-!buildroot-2025.11/.config
-!buildroot-2025.11/packages/busybox/busybox.config
