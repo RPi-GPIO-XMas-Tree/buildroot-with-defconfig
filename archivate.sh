@@ -14,8 +14,8 @@ tar cJf $BIN_ARCHIVE \
 sha256sum $BIN_ARCHIVE > checksum.txt
 
 
-cp buildroot/.config buildroot_config
-cp buildroot/packages/busybox/busybox.config busybox_config
+cp buildroot-2025.11/.config buildroot_config
+cp buildroot-2025.11/package/busybox/busybox.config busybox_config
 
 zip -r $SRC_ARCHIVE \
     checksum.txt \
