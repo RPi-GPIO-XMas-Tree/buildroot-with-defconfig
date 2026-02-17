@@ -1,22 +1,16 @@
-# Ignore everything in buildroot-2025.11
-buildroot-2025.11/**
+buildroot-2025.11/*
 
-# Re-include only required files
 !buildroot-2025.11/output/
-!buildroot-2025.11/output/images*/
 !buildroot-2025.11/busybox/
+!buildroot-2025.11/linux/
+
+!buildroot-2025.11/output/images*/
 !buildroot-2025.11/busybox/busybox.config
-!buildroot-2025.11/linux.linux.hash
+!buildroot-2025.11/linux/linux.hash
 !buildroot-2025.11/.config
 
-# Ignore other buildroot extracted dirs
 buildroot-[0-9]*.[0-9]*/
-
-# Ignore buildroot archives
 buildroot-[0-9]*.[0-9]*.gz
 buildroot-[0-9]*.[0-9]*.xz
 buildroot-[0-9]*.[0-9]*.zip
-
-# Ignore buildroot symbolic link
 buildroot
-
