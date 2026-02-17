@@ -107,3 +107,14 @@ promit ca nu refuz un pin (non-GPIO) pentru laptop 😄
 Indiferent de asta, multumesc pentru corectare!
 
 
+
+# Packete suplimentare
+
+Pentru ca sistemul sa poate fi testat prin teste automate, a fost nevoie de:
+1. Datetime UTC curent (nu anul nou 1970):
+	- in busybox am activat `ntpd`
+	- am creat un script de init.d care sa obtina automat la boot data curenta
+2. Utilitarul `curl`: am cautat dupa `libcurl` in menuconfig si am activat optiunea
+3. DNS resolution: fisierul `/etc/resolv.conf` foloseste 2 servere DNS
+4. Dimensiunea imaginii a trebuit marita putin
+
