@@ -1,14 +1,22 @@
-# Permite explicit:
-!buildroot_defconfig
-!buildroot-2025.11/output/images
-!buildroot-2025.11/linux/linux.hash
-!buildroot-2025.11/packages/busybox/busybox.config
+# Ignore everything in buildroot-2025.11
+buildroot-2025.11/**
 
-target/
+# Re-include only required files
+!buildroot-2025.11/output/
+!buildroot-2025.11/output/images*/
+!buildroot-2025.11/busybox/
+!buildroot-2025.11/busybox/busybox.config
+!buildroot-2025.11/linux.linux.hash
+!buildroot-2025.11/.config
+
+# Ignore other buildroot extracted dirs
 buildroot-[0-9]*.[0-9]*/
-buildroot-[0-9]*.[0-9]*.tar.gz
 
-# Permite explicit:
-!buildroot_defconfig
-!SI-Tema2-bin.tar.xz
-!SI-Tema2-src.zip
+# Ignore buildroot archives
+buildroot-[0-9]*.[0-9]*.gz
+buildroot-[0-9]*.[0-9]*.xz
+buildroot-[0-9]*.[0-9]*.zip
+
+# Ignore buildroot symbolic link
+buildroot
+
