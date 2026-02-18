@@ -461,6 +461,32 @@ async fn health_check() -> impl IntoResponse {
 }
 
 
+async fn get_ip_api_request() -> impl IntoResponse {
+    let response = match reqwest::get("http://ip-api.com/json").await {
+        Ok(res) => res,
+        Err(err) => {
+            return Json(json!({
+                "err": format!("Failed to send request: {}", err)
+            }));
+        }
+    };
+
+    if !response.status().is_success() {
+        return Json(json!({
+            "err": format!("Server returned status: {}", response.status())
+        }));
+    }
+
+    // Parsarea corpului raspunsului ca JSON
+    match response.json::<Value>().await {
+        Ok(data) => Json(data),
+        Err(err) => Json(json!({
+            "err": format!("Failed to parse JSON response: {}", err)
+        })),
+    }
+}
+
+
 async fn get_possible_led_states() -> impl IntoResponse {
     Json(json!({
         "RGB LED": [
@@ -522,42 +548,6 @@ async fn get_all_animations() -> impl IntoResponse {
 }
 
 
-async fn set_non_rgb_led(
-    State(state): State<SharedState>,
-    Json(request): Json<NonRgbLedRequest>,
-) -> Result<StatusCode, (StatusCode, Json<serde_json::Value>)> {
-    let mut s = state.lock().unwrap();
-
-    if request.id >= NUM_NON_RGB_LEDS {
-        let error_response = (
-            StatusCode::BAD_REQUEST,
-            Json(serde_json::json!({
-                "error": format!("Invalid non-RGB LED ID='{}'. Expected a value between 0 and {}",
-                    request.id, NUM_NON_RGB_LEDS - 1)
-            }))
-        );
-        return Err(error_response);
-    }
-
-    match request.state {
-        NonRgbRequestState::On =>
-            s.non_rgb_leds[request.id as usize] = NonRgbState::On,
-        
-        NonRgbRequestState::Off =>
-            s.non_rgb_leds[request.id as usize] = NonRgbState::Off,
-
-        NonRgbRequestState::Blinking => {
-            // Nu intrerupe daca este deja in animatie
-            if s.non_rgb_leds[request.id as usize] != NonRgbState::BlinkingOn
-                && s.non_rgb_leds[request.id as usize] != NonRgbState::BlinkingOff {
-                    // LED-ul va fi setat imediat (<= 1 sec) la ON in GPIO loop
-                    s.non_rgb_leds[request.id as usize] = NonRgbState::BlinkingOff;
-            }
-        }
-    }
-
-    Ok(StatusCode::OK)
-}
 
 
 async fn get_current_animation(
@@ -631,44 +621,41 @@ async fn prev_animation(State(state): State<SharedState>) -> impl IntoResponse {
 }
 
 
-async fn get_rgb_led(
+async fn set_non_rgb_led(
     State(state): State<SharedState>,
-    Path(id): Path<usize>,
-) -> Result<(StatusCode, Json<Value>), (StatusCode, Json<Value>)> {
-    let s = state.lock().unwrap();
+    Json(request): Json<NonRgbLedRequest>,
+) -> Result<StatusCode, (StatusCode, Json<serde_json::Value>)> {
+    let mut s = state.lock().unwrap();
 
-    if id > NUM_RGB_LEDS as usize {
+    if request.id >= NUM_NON_RGB_LEDS {
         let error_response = (
             StatusCode::BAD_REQUEST,
             Json(serde_json::json!({
-                "error": format!("Invalid non-RGB LED ID='{}'. Expected a value between 1 and {}",
-                    id, NUM_NON_RGB_LEDS)
+                "error": format!("Invalid non-RGB LED ID='{}'. Expected a value between 0 and {}",
+                    request.id, NUM_NON_RGB_LEDS - 1)
             }))
         );
         return Err(error_response);
     }
 
-    let led = &s.rgb_leds[id];
+    match request.state {
+        NonRgbRequestState::On =>
+            s.non_rgb_leds[request.id as usize] = NonRgbState::On,
+        
+        NonRgbRequestState::Off =>
+            s.non_rgb_leds[request.id as usize] = NonRgbState::Off,
 
+        NonRgbRequestState::Blinking => {
+            // Nu intrerupe daca este deja in animatie
+            if s.non_rgb_leds[request.id as usize] != NonRgbState::BlinkingOn
+                && s.non_rgb_leds[request.id as usize] != NonRgbState::BlinkingOff {
+                    // LED-ul va fi setat imediat (<= 1 sec) la ON in GPIO loop
+                    s.non_rgb_leds[request.id as usize] = NonRgbState::BlinkingOff;
+            }
+        }
+    }
 
-    let success_response = (
-        StatusCode::OK,
-        Json(json!({
-            "status": led
-        }))
-    );
-
-    Ok(success_response)
-}
-
-
-async fn get_non_rgb_led(
-    State(state): State<SharedState>,
-    Path(id): Path<usize>,
-) -> Json<serde_json::Value> {
-    let s = state.lock().unwrap();
-    let led = &s.non_rgb_leds[id];
-    Json(serde_json::json!({ "state": led }))
+    Ok(StatusCode::OK)
 }
 
 
@@ -693,9 +680,9 @@ async fn main() {
     tokio::spawn(gpio_control_rgb_leds_loop(Arc::clone(&state)));
     tokio::spawn(gpio_control_non_rgb_leds_loop(Arc::clone(&state)));
 
-
     let app = Router::new()
         .route("/api/health-check", get(health_check))
+        .route("/api/pub-ip-info", get(get_ip_api_request))
         .route("/api/possible-led-states", get(get_possible_led_states))
         .route("/api/rgb-leds", get(get_all_rgb_leds))
         .route("/api/non-rgb-leds", get(get_all_non_rgb_leds))
@@ -704,9 +691,7 @@ async fn main() {
         .route("/api/current-animation/{id}", post(set_animation))
         .route("/api/next-animation", post(next_animation))
         .route("/api/prev-animation", post(prev_animation))
-        .route("/api/rgb-led/{id}", get(get_rgb_led))
-        .route("/api/non-rgb-led/{id}", get(get_non_rgb_led))
-        .route("/api/non-rgb-led", post(set_non_rgb_led))
+		.route("/api/non-rgb-led", post(set_non_rgb_led))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", PORT)).await.unwrap();

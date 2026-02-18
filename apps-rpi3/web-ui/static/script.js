@@ -3,7 +3,7 @@ let animations = {};
 // `http://127.0.0.1:8080/api` e tzeapa mare
 // eu credeam ca request-ul se duce catre serviciul de GPIO Control,
 // dar de fapt se face la mine pe calculator (nu in QEMU)!!!
-const API_BASE = '/api';
+const GPIO_BASE_API = '/api';
 
 const colorMap = {
     "white":  "rgb(255, 255, 255)",
@@ -22,19 +22,19 @@ const nonRgbColors = {
     "1": "rgb(255, 20, 147)" 
 };
 
-async function fetchIpInfo() {
+async function fetchPubIpInfo() {
     try {
-        const response = await fetch('https://ipapi.co/json/');
+        const response = await fetch(`${GPIO_BASE_API}/pub-ip-info`);
         const data = await response.json();
-        document.getElementById('ip-address').innerText = data.ip;
-        document.getElementById('location').innerText = `${data.city}, ${data.country_name}`;
+        document.getElementById('ip-address').innerText = data.query;
+        document.getElementById('location').innerText = `${data.city}, ${data.country}`;
     } catch (e) {}
 }
 
 // LOOP: RGB LEDs
 async function updateRGBLedsLoop() {
     try {
-        const response = await fetch(`${API_BASE}/rgb-leds`, { 
+        const response = await fetch(`${GPIO_BASE_API}/rgb-leds`, { 
             headers: { 'Cache-Control': 'no-cache' } 
         });
         if (response.ok) {
@@ -56,7 +56,7 @@ async function updateRGBLedsLoop() {
 // LOOP: Non-RGB LEDs
 async function updateNonRgbLedsLoop() {
     try {
-        const response = await fetch(`${API_BASE}/non-rgb-leds`, { 
+        const response = await fetch(`${GPIO_BASE_API}/non-rgb-leds`, { 
             headers: { 'Cache-Control': 'no-cache' } 
         });
         if (response.ok) {
@@ -89,7 +89,7 @@ async function updateNonRgbLedsLoop() {
 
 async function setNonRgbState(id, state) {
     try {
-        await fetch(`${API_BASE}/non-rgb-led`, {
+        await fetch(`${GPIO_BASE_API}/non-rgb-led`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: parseInt(id), state: state })
@@ -101,7 +101,7 @@ async function setNonRgbState(id, state) {
 
 async function updateCurrentAnimationText() {
     try {
-        const response = await fetch(`${API_BASE}/current-animation`);
+        const response = await fetch(`${GPIO_BASE_API}/current-animation`);
         const data = await response.json();
         document.getElementById('current-animation').innerText = animations[data.id] || data.name;
         document.getElementById('animation-dropdown').value = data.id;
@@ -110,7 +110,7 @@ async function updateCurrentAnimationText() {
 
 async function initAnimations() {
     try {
-        const response = await fetch(`${API_BASE}/animations`);
+        const response = await fetch(`${GPIO_BASE_API}/animations`);
         animations = await response.json();
         const dropdown = document.getElementById('animation-dropdown');
         dropdown.innerHTML = ''; 
@@ -126,23 +126,23 @@ async function initAnimations() {
 async function selectAnim() {
     const val = document.getElementById('animation-dropdown').value;
     if (val) {
-        await fetch(`${API_BASE}/current-animation/${val}`, { method: 'POST' });
+        await fetch(`${GPIO_BASE_API}/current-animation/${val}`, { method: 'POST' });
         setTimeout(updateCurrentAnimationText, 100);
     }
 }
 
 async function nextAnim() {
-    await fetch(`${API_BASE}/next-animation`, { method: 'POST' });
+    await fetch(`${GPIO_BASE_API}/next-animation`, { method: 'POST' });
     setTimeout(updateCurrentAnimationText, 100);
 }
 
 async function prevAnim() {
-    await fetch(`${API_BASE}/prev-animation`, { method: 'POST' });
+    await fetch(`${GPIO_BASE_API}/prev-animation`, { method: 'POST' });
     setTimeout(updateCurrentAnimationText, 100);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetchIpInfo();
+    fetchPubIpInfo();
     initAnimations();
     updateRGBLedsLoop();
     updateNonRgbLedsLoop();
