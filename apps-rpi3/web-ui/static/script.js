@@ -11,7 +11,7 @@ const colorMap = {
     "green":  "rgb(0, 255, 0)",
     "blue":   "rgb(0, 0, 255)",
     "yellow": "rgb(255, 255, 0)",
-    "purple": "rgb(255, 0, 255)",
+    "magenta": "rgb(255, 0, 255)",
     "ciel":   "rgb(0, 255, 255)",
     "off":    "rgb(17, 17, 17)"
 };

@@ -16,14 +16,14 @@ use rppal::gpio::Gpio;
 const PORT: u16 = 8080;
 
 const ANIMATIONS: [Animation; 7] = [
-    // STEP 1: [WHITE] [RED][GREEN] [BLUE][YELLOW][PURPLE]
+    // STEP 1: [WHITE] [RED][GREEN] [BLUE][YELLOW][MAGENTA]
     // STEP 2: [OFF] [OFF][OFF] [OFF][OFF][OFF]
-    // STEP 3: [CIEL] [PURPLE][YELLOW] [BLUE][GREEN][RED]
+    // STEP 3: [CIEL] [MAGENTA][YELLOW] [BLUE][GREEN][RED]
     Animation { animation_type: AnimationType::Blink },
 
-    // STEP 1: [YELLOW] [RED][PURPLE] [BLUE][CIEL][GREEN]
-    // STEP 2: [GREEN] [YELLOW][RED] [PURPLE][BLUE][CIEL]
-    // STEP 3: [CIEL] [GREEN][YELLOW] [RED][PURPLE][BLUE]
+    // STEP 1: [YELLOW] [RED][MAGENTA] [BLUE][CIEL][GREEN]
+    // STEP 2: [GREEN] [YELLOW][RED] [MAGENTA][BLUE][CIEL]
+    // STEP 3: [CIEL] [GREEN][YELLOW] [RED][MAGENTA][BLUE]
     Animation { animation_type: AnimationType::Wave },
 
     // STEP 1: [BLUE] [BLUE][BLUE] [BLUE][BLUE][BLUE]
@@ -32,21 +32,21 @@ const ANIMATIONS: [Animation; 7] = [
     // STEP 4: [BLUE] [BLUE][BLUE] [WHITE][WHITE][WHITE]
     Animation { animation_type: AnimationType::Snow },
 
-    // STEP 1: [PURPLE] [YELLOW][PURPLE] [YELLOW][PURPLE][YELLOW]
-    // STEP 2: [YELLOW] [PURPLE][YELLOW] [PURPLE][YELLOW][PURPLE]
+    // STEP 1: [MAGENTA] [YELLOW][MAGENTA] [YELLOW][MAGENTA][YELLOW]
+    // STEP 2: [YELLOW] [MAGENTA][YELLOW] [MAGENTA][YELLOW][MAGENTA]
     // STEP 3: [RED] [CIEL][RED] [CIEL][RED][CIEL]
     Animation { animation_type: AnimationType::Alternate },
 
     Animation { animation_type: AnimationType::Spiral },
 
     // STEP 1: [OFF] [OFF][OFF] [BLUE][GREEN][CIEL]
-    // STEP 2: [OFF] [PURPLE][PURPLE] [BLUE][GREEN][CIEL]
-    // STEP 3: [YELLOW] [PURPLE][PURPLE] [BLUE][GREEN][CIEL]
+    // STEP 2: [OFF] [MAGENTA][MAGENTA] [BLUE][GREEN][CIEL]
+    // STEP 3: [YELLOW] [MAGENTA][MAGENTA] [BLUE][GREEN][CIEL]
     Animation { animation_type: AnimationType::BottomUp },
 
     // STEP 1: [RED] [OFF][OFF] [OFF][OFF][OFF]
-    // STEP 2: [PURPLE] [RED][RED] [OFF][OFF][OFF]
-    // STEP 3: [CIEL] [PURPLE][PURPLE] [RED][RED][RED]
+    // STEP 2: [MAGENTA] [RED][RED] [OFF][OFF][OFF]
+    // STEP 3: [CIEL] [MAGENTA][MAGENTA] [RED][RED][RED]
     Animation { animation_type: AnimationType::TopDown },
 ];
 
@@ -64,7 +64,7 @@ enum RgbState {
     Green,
     Blue,
     Yellow,   // RGB(255, 255, 0)
-    Purple,   // RGB(255, 0, 255)
+    Magenta,   // RGB(255, 0, 255)
     Ciel,     // RGB(0, 255, 255)
     Off,
 }
@@ -171,7 +171,7 @@ fn set_physical_rgb_led(idx: u8, desired_rgb_state: &RgbState, gpio: &Gpio) {
             gpio.get(idx * 3 + 1).unwrap().into_output().set_high();       // GREEN
             gpio.get(idx * 3 + 2).unwrap().into_output().set_low();       // BLUE
         },
-        RgbState::Purple => {
+        RgbState::Magenta => {
             // RGB(255, 0, 255)
             gpio.get(idx * 3).unwrap().into_output().set_high();           // RED
             gpio.get(idx * 3 + 1).unwrap().into_output().set_low();       // GREEN
@@ -223,9 +223,9 @@ async fn get_current_animation_type(state: &SharedState) -> AnimationType {
 
 async fn animation_blink(state: &SharedState) {
     let frames = [
-        [RgbState::White, RgbState::Red, RgbState::Green, RgbState::Blue, RgbState::Yellow, RgbState::Purple],
+        [RgbState::White, RgbState::Red, RgbState::Green, RgbState::Blue, RgbState::Yellow, RgbState::Magenta],
         [RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off],
-        [RgbState::Ciel, RgbState::Purple, RgbState::Yellow, RgbState::Blue, RgbState::Green, RgbState::Red],
+        [RgbState::Ciel, RgbState::Magenta, RgbState::Yellow, RgbState::Blue, RgbState::Green, RgbState::Red],
     ];
 
     for frame in frames {
@@ -244,10 +244,10 @@ async fn animation_blink(state: &SharedState) {
 
 async fn animation_wave(state: &SharedState) {
     let frames = [
-        [RgbState::Yellow, RgbState::Red, RgbState::Purple, RgbState::Blue, RgbState::Ciel, RgbState::Green],
-        [RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Purple, RgbState::Blue, RgbState::Ciel],
-        [RgbState::Ciel, RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Purple, RgbState::Blue],
-        [RgbState::Blue, RgbState::Ciel, RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Purple],
+        [RgbState::Yellow, RgbState::Red, RgbState::Magenta, RgbState::Blue, RgbState::Ciel, RgbState::Green],
+        [RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Magenta, RgbState::Blue, RgbState::Ciel],
+        [RgbState::Ciel, RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Magenta, RgbState::Blue],
+        [RgbState::Blue, RgbState::Ciel, RgbState::Green, RgbState::Yellow, RgbState::Red, RgbState::Magenta],
     ];
 
     for frame in frames {
@@ -289,8 +289,8 @@ async fn animation_snow(state: &SharedState) {
 
 async fn animation_alternate(state: &SharedState) {
     let frames = [
-        [RgbState::Purple, RgbState::Yellow, RgbState::Purple, RgbState::Yellow, RgbState::Purple, RgbState::Yellow],
-        [RgbState::Yellow, RgbState::Purple, RgbState::Yellow, RgbState::Purple, RgbState::Yellow, RgbState::Purple],
+        [RgbState::Magenta, RgbState::Yellow, RgbState::Magenta, RgbState::Yellow, RgbState::Magenta, RgbState::Yellow],
+        [RgbState::Yellow, RgbState::Magenta, RgbState::Yellow, RgbState::Magenta, RgbState::Yellow, RgbState::Magenta],
         [RgbState::Red, RgbState::Ciel, RgbState::Red, RgbState::Ciel, RgbState::Red, RgbState::Ciel],
         [RgbState::Ciel, RgbState::Red, RgbState::Ciel, RgbState::Red, RgbState::Ciel, RgbState::Red],
     ];
@@ -312,7 +312,7 @@ async fn animation_alternate(state: &SharedState) {
 async fn animation_spiral(state: &SharedState) {
     // Indecsii pt o miscare circulara pe brad
     let path = [0, 2, 5, 4, 3, 1];
-    let colors = [RgbState::Purple, RgbState::Yellow, RgbState::Ciel, RgbState::Red];
+    let colors = [RgbState::Magenta, RgbState::Yellow, RgbState::Ciel, RgbState::Red];
 
     for color in colors {
         for &active_idx in path.iter() {
@@ -336,8 +336,8 @@ async fn animation_bottom_up(state: &SharedState) {
     let frames = [
         [RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off],
         [RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Blue, RgbState::Green, RgbState::Ciel],
-        [RgbState::Off, RgbState::Purple, RgbState::Purple, RgbState::Blue, RgbState::Green, RgbState::Ciel],
-        [RgbState::Yellow, RgbState::Purple, RgbState::Purple, RgbState::Blue, RgbState::Green, RgbState::Ciel],
+        [RgbState::Off, RgbState::Magenta, RgbState::Magenta, RgbState::Blue, RgbState::Green, RgbState::Ciel],
+        [RgbState::Yellow, RgbState::Magenta, RgbState::Magenta, RgbState::Blue, RgbState::Green, RgbState::Ciel],
     ];
 
     for frame in frames {
@@ -359,8 +359,8 @@ async fn animation_top_down(state: &SharedState) {
     let frames = [
         [RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off],
         [RgbState::Red, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off, RgbState::Off],
-        [RgbState::Purple, RgbState::Red, RgbState::Red, RgbState::Off, RgbState::Off, RgbState::Off],
-        [RgbState::Ciel, RgbState::Purple, RgbState::Purple, RgbState::Red, RgbState::Red, RgbState::Red],
+        [RgbState::Magenta, RgbState::Red, RgbState::Red, RgbState::Off, RgbState::Off, RgbState::Off],
+        [RgbState::Ciel, RgbState::Magenta, RgbState::Magenta, RgbState::Red, RgbState::Red, RgbState::Red],
     ];
 
     for frame in frames {
@@ -495,7 +495,7 @@ async fn get_possible_led_states() -> impl IntoResponse {
             "green",
             "blue", 
             "yellow",
-            "purple",
+            "magenta",
             "ciel",
             "off"
         ],
