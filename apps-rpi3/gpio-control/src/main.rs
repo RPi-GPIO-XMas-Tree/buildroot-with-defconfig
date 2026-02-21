@@ -35,6 +35,7 @@ const ANIMATIONS: [Animation; 7] = [
     // STEP 1: [MAGENTA] [YELLOW][MAGENTA] [YELLOW][MAGENTA][YELLOW]
     // STEP 2: [YELLOW] [MAGENTA][YELLOW] [MAGENTA][YELLOW][MAGENTA]
     // STEP 3: [RED] [CIEL][RED] [CIEL][RED][CIEL]
+    // STEP 4: [CIEL] [RED][CIEL] [RED][CIEL][RED]
     Animation { animation_type: AnimationType::Alternate },
 
     Animation { animation_type: AnimationType::Spiral },
@@ -45,8 +46,9 @@ const ANIMATIONS: [Animation; 7] = [
     Animation { animation_type: AnimationType::BottomUp },
 
     // STEP 1: [RED] [OFF][OFF] [OFF][OFF][OFF]
-    // STEP 2: [MAGENTA] [RED][RED] [OFF][OFF][OFF]
-    // STEP 3: [CIEL] [MAGENTA][MAGENTA] [RED][RED][RED]
+    // STEP 2: [OFF] [OFF][OFF] [OFF][OFF][OFF]
+    // STEP 3: [MAGENTA] [RED][RED] [OFF][OFF][OFF]
+    // STEP 4: [CIEL] [MAGENTA][MAGENTA] [RED][RED][RED]
     Animation { animation_type: AnimationType::TopDown },
 ];
 
@@ -63,9 +65,9 @@ enum RgbState {
     Red,
     Green,
     Blue,
-    Yellow,   // RGB(255, 255, 0)
+    Yellow,    // RGB(255, 255, 0)
     Magenta,   // RGB(255, 0, 255)
-    Ciel,     // RGB(0, 255, 255)
+    Ciel,      // RGB(0, 255, 255)
     Off,
 }
 
@@ -91,7 +93,7 @@ enum AnimationType {
     Snow,
     Alternate,
     Spiral,
-    #[serde(rename = "buttom-up")]
+    #[serde(rename = "bottom-up")]
     BottomUp,
     #[serde(rename = "top-down")]
     TopDown,
