@@ -118,3 +118,11 @@ Pentru ca sistemul sa poate fi testat prin teste automate, a fost nevoie de:
 3. DNS resolution: fisierul `/etc/resolv.conf` foloseste 2 servere DNS
 4. Dimensiunea imaginii a trebuit marita putin
 
+Pentru usurinta, am copiat fisierul de configuratie busybox (packages/busybox/busybox.config)
+intr-un fisier din afara buildroot-ului, si l-am linkat in menuconfig.
+
+In urma activarii serviciului NTPd din busybox, am rulat `make busybox-rebuild` inainte de `make`.
+PS: `make busysbox-reconfigure` revine la setarile default (cred).
+
+
+

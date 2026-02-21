@@ -24,6 +24,7 @@ const ANIMATIONS: [Animation; 7] = [
     // STEP 1: [YELLOW] [RED][MAGENTA] [BLUE][CIEL][GREEN]
     // STEP 2: [GREEN] [YELLOW][RED] [MAGENTA][BLUE][CIEL]
     // STEP 3: [CIEL] [GREEN][YELLOW] [RED][MAGENTA][BLUE]
+    // STEP 4: [BLUE] [CIEL][GREEN] [YELLOW][RED][MAGENTA]
     Animation { animation_type: AnimationType::Wave },
 
     // STEP 1: [BLUE] [BLUE][BLUE] [BLUE][BLUE][BLUE]
