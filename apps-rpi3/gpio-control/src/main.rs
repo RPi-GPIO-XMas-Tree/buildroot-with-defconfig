@@ -685,7 +685,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/api/health-check", get(health_check))
-        .route("/api/pub-ip-info", get(get_ip_api_request))
+        .route("/api/public-ip-info", get(get_ip_api_request))
         .route("/api/possible-led-states", get(get_possible_led_states))
         .route("/api/rgb-leds", get(get_all_rgb_leds))
         .route("/api/non-rgb-leds", get(get_all_non_rgb_leds))

@@ -24,7 +24,7 @@ const nonRgbColors = {
 
 async function fetchPubIpInfo() {
     try {
-        const response = await fetch(`${GPIO_BASE_API}/pub-ip-info`);
+        const response = await fetch(`${GPIO_BASE_API}/public-ip-info`);
         const data = await response.json();
         document.getElementById('ip-address').innerText = data.query;
         document.getElementById('location').innerText = `${data.city}, ${data.country}`;
