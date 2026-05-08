@@ -1,0 +1,45 @@
+name: Create Source Artifacts
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get short commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Verify files existence
+        run: |
+          if [ ! -f "SI-Tema2-bin.tar.xz" ]; then
+            echo "Error: SI-Tema2-bin.tar.xz not found!"
+            exit 1
+          fi
+          if [ ! -f "SI-Tema2-src.zip" ]; then
+            echo "Error: SI-Tema2-src.zip not found!"
+            exit 1
+          fi
+
+      - name: Rename files with commit hash
+        run: |
+          mv SI-Tema2-bin.tar.xz SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
+          mv SI-Tema2-src.zip SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-archives-${{ steps.vars.outputs.sha_short }}
+          path: |
+            SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
+            SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
+          if-no-files-found: error
