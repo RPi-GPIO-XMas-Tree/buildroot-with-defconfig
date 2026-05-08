@@ -35,11 +35,16 @@ jobs:
           mv SI-Tema2-bin.tar.xz SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
           mv SI-Tema2-src.zip SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
 
-      - name: Upload Artifact
+      - name: Upload Artifact of binaries
         uses: actions/upload-artifact@v4
         with:
-          name: source-archives-${{ steps.vars.outputs.sha_short }}
-          path: |
-            SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
-            SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
+          name: SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
+          path: SI-Tema2-bin-${{ steps.vars.outputs.sha_short }}.tar.xz
+          if-no-files-found: error
+
+      - name: Upload Artifact of source code
+        uses: actions/upload-artifact@v4
+        with:
+          name: SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
+          path: SI-Tema2-src-${{ steps.vars.outputs.sha_short }}.zip
           if-no-files-found: error
